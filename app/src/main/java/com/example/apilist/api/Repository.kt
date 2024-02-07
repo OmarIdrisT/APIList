@@ -4,5 +4,5 @@ class Repository {
 
     val apiInterface = APIInterface.create()
 
-    suspend fun getAllCardList() = apiInterface.getCardList()
+    suspend fun getAllCardList() = apiInterface.getCards()
 }

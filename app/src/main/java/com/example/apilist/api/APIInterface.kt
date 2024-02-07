@@ -1,5 +1,6 @@
 package com.example.apilist.api
 
+import com.example.apilist.model.CardList
 import com.example.apilist.model.Data
 import okhttp3.OkHttpClient
 import retrofit2.Response
@@ -11,7 +12,7 @@ import retrofit2.http.Url
 interface APIInterface {
 
     @GET("characters")
-    suspend fun getCardList(): Response<Data>
+    suspend fun getCards(): Response<CardList>
 
     companion object {
         val BASE_URL = "https://api.pokemontcg.io/v2/"

@@ -15,15 +15,15 @@ class APIViewModel: ViewModel() {
     private val repository = Repository()
     private val _loading = MutableLiveData(true)
     val loading = _loading
-    private val _cards = MutableLiveData<Data>()
-    val cards = _cards
+    private val _data = MutableLiveData<Data>()
+    val data = _data
 
-    fun getCardList(){
+    fun getData(){
         CoroutineScope(Dispatchers.IO).launch {
             val response = repository.getAllCardList()
             withContext(Dispatchers.Main) {
                 if(response.isSuccessful){
-                    _cards.value = response.body()
+                    _data.value = response.body()
                     _loading.value = false
                 }
                 else{
