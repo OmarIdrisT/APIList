@@ -1,11 +1,5 @@
 package com.example.apilist.view
 
-import android.content.Context
-import android.graphics.Typeface
-import android.graphics.fonts.Font
-import android.graphics.fonts.FontFamily
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -28,17 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.apilist.R
 import com.example.apilist.navigation.Routes
 import kotlinx.coroutines.delay
-import java.time.format.TextStyle
-import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Splash(alphaAnim: Float) {
     val colorNaranja = Color(0xffffa420)
@@ -68,13 +58,10 @@ fun Splash(alphaAnim: Float) {
             Row(
                 horizontalArrangement = Arrangement.Center
             ) {
-                val context = LocalContext.current
-                val typeface = loadCustomFont(context)
                 for (lletra in 0 until welcome.length) {
                     Text(
                         text = welcome[lletra].toString(),
-                        color = colorTitle[lletra],
-                        fontFamily = Font(fontResource = R.font.pokemon)
+                        color = colorTitle[lletra]
                     )
                 }
             }
@@ -98,9 +85,3 @@ fun SplashScreen(navController: NavController) {
     Splash(alphaAnim.value)
 }
 
-
-fun loadCustomFont(context: Context): Typeface {
-
-    return Typeface.createFromAsset(context.assets, "font/pokemon.ttf")
-
-}

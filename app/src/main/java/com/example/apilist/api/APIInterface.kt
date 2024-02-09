@@ -1,17 +1,15 @@
 package com.example.apilist.api
 
 import com.example.apilist.model.CardList
-import com.example.apilist.model.Data
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Url
 
 interface APIInterface {
 
-    @GET("characters")
+    @GET("cards")
     suspend fun getCards(): Response<CardList>
 
     companion object {
