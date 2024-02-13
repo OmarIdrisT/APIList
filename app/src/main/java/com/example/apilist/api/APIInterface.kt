@@ -1,16 +1,21 @@
 package com.example.apilist.api
 
 import com.example.apilist.model.CardList
+import com.example.apilist.model.Data
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface APIInterface {
 
     @GET("cards")
     suspend fun getCards(): Response<CardList>
+
+    @GET("cards/{id}")
+    suspend fun getCardById(@Path("id") id: String) : Response<Data>
 
     companion object {
         val BASE_URL = "https://api.pokemontcg.io/v2/"
