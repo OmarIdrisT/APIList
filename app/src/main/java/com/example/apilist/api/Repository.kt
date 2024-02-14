@@ -1,7 +1,5 @@
 package com.example.apilist.api
 
-import com.example.apilist.viewmodel.APIViewModel
-
 class Repository {
 
     val apiInterface = APIInterface.create()
