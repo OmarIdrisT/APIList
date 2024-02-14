@@ -65,10 +65,19 @@ class APIViewModel: ViewModel() {
         this.id=identificar
     }
 
-    var favoritos = false
+    var favoritos : Boolean by mutableStateOf(false)
+        private set
     var favIconList = when {
         favoritos -> Icons.Filled.Favorite
         else -> Icons.Filled.FavoriteBorder
     }
 
+    fun agregarFavoritos(valor: Boolean){
+        favoritos = valor
+        favIconList = if (favoritos) {
+            Icons.Filled.Favorite}
+            else {
+                Icons.Filled.FavoriteBorder
+            }
+    }
 }
