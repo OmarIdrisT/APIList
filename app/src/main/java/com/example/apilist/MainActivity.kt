@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.apilist.navigation.Routes
 import com.example.apilist.ui.theme.APIListTheme
 import com.example.apilist.view.DetailScreen
+import com.example.apilist.view.FavoriteScreen
 import com.example.apilist.view.MenuScreen
 import com.example.apilist.view.SplashScreen
 import com.example.apilist.viewmodel.APIViewModel
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.SplashScreen.route) { SplashScreen(navigationController) }
                         composable(Routes.MenuScreen.route) {MenuScreen(navigationController,myViewModel)}
                         composable(Routes.DetailScreen.route) {DetailScreen(navigationController, myViewModel)}
+                        composable(Routes.FavoriteScreen.route) {FavoriteScreen(navigationController, myViewModel)}
                     }
                 }
             }

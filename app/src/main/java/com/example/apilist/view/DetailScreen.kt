@@ -60,7 +60,7 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
         border = BorderStroke(2.dp, Color.LightGray),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(8.dp),
-        colors = CardDefaults.cardColors(Color.Black.copy(alpha = 0.5f)),
+        colors = CardDefaults.cardColors(Color.DarkGray.copy(alpha = 0.25f)),
     ) {
         Row(
             modifier = Modifier

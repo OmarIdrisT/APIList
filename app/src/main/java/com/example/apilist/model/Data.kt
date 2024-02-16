@@ -14,7 +14,7 @@ data class Data(
     val name: String,
     val nationalPokedexNumbers: List<Int>,
     val number: String,
-    val rarity: String,
+    var rarity: String,
     val regulationMark: String,
     val resistances: List<Resistance>,
     val retreatCost: List<String>,

@@ -6,14 +6,11 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.apilist.api.Repository
 import com.example.apilist.model.CardList
-import com.example.apilist.model.Data
-import com.example.apilist.model.Images
 import com.example.apilist.model.PokemonDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,10 +71,9 @@ class APIViewModel: ViewModel() {
 
     fun agregarFavoritos(valor: Boolean){
         favoritos = valor
-        favIconList = if (favoritos) {
-            Icons.Filled.Favorite}
-            else {
-                Icons.Filled.FavoriteBorder
+        favIconList = when {
+            favoritos -> Icons.Filled.Favorite
+            else -> Icons.Filled.FavoriteBorder
             }
     }
 }
