@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -69,7 +68,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
 
     )
     Scaffold(
-        topBar = { MyTopAppBar() },
+        topBar = { MenuTopAppBar() },
         bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
@@ -125,7 +124,7 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
         border = BorderStroke(2.dp, Color.LightGray),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(8.dp),
-        colors = CardDefaults.cardColors(Color.DarkGray.copy(alpha = 0.25f)),
+        colors = CardDefaults.cardColors(Color.DarkGray.copy(alpha = 0.6f)),
         onClick = {
             myViewModel.setIDx(card.id)
             navController.navigate(Routes.DetailScreen.route)}
@@ -151,18 +150,6 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
                     .fillMaxSize()
                     .weight(1f)
             )
-            Column(
-                modifier = Modifier.fillMaxHeight(),
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                IconButton(onClick = { isFav = !isFav
-                    myViewModel.agregarFavoritos(isFav)},
-                    modifier = Modifier.wrapContentWidth()) {
-                    Icon(imageVector = myViewModel.favIconList, contentDescription = "Fav", tint = Color.Red)
-                }
-
-            }
         }
     }
 }
@@ -170,20 +157,14 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopAppBar() {
+fun MenuTopAppBar() {
     TopAppBar(
         title = { Text(text = "Card List") },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
-            navigationIconContentColor = Color.White,
             actionIconContentColor = Color.White
         ),
-        navigationIcon = {
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-            }
-        },
         actions = {
             IconButton(onClick = {}) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
