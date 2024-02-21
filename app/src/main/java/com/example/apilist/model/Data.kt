@@ -1,5 +1,9 @@
 package com.example.apilist.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "PokemonEntity")
 data class Data(
     val abilities: List<Ability>,
     val attacks: List<Attack>,
@@ -8,6 +12,7 @@ data class Data(
     val evolvesTo: List<String>,
     val flavorText: String,
     val hp: String,
+    @PrimaryKey
     val id: String,
     val images: Images,
     val level: String,

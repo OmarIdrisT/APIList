@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.apilist.R
+import com.example.apilist.api.Repository
 import com.example.apilist.model.BottomNavigationScreen
 import com.example.apilist.viewmodel.APIViewModel
 
@@ -47,7 +48,6 @@ fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
                     modifier = Modifier.zIndex(0f)
 
                 )
-                MyRecyclerView(myViewModel = myViewModel, navController = navController)
             }
         }
     )

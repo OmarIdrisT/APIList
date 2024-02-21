@@ -9,11 +9,11 @@ import androidx.room.Query
 @Dao
 interface PokemonDao {
     @Query("SELECT * FROM PokemonEntity")
-    suspend fun getCards() : MutableList<Pokemon>
+    suspend fun getCards() : MutableList<Data>
     @Query("SELECT * FROM PokemonEntity where id = :pokemonId")
-    suspend fun getCardsById(pokemonId: String): MutableList<Pokemon>
+    suspend fun getCardsById(pokemonId: String): MutableList<Data>
     @Insert
-    suspend fun addPokemon(pokemon: Pokemon)
+    suspend fun addPokemon(pokemon: Data)
     @Delete
-    suspend fun deletePokemon(pokemon: Pokemon)
+    suspend fun deletePokemon(pokemon: Data)
 }

@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +47,6 @@ import com.example.apilist.R
 import com.example.apilist.model.BottomNavigationScreen
 import com.example.apilist.model.Data
 import com.example.apilist.model.Images
-import com.example.apilist.model.Pokemon
 import com.example.apilist.model.PokemonDetails
 import com.example.apilist.navigation.Routes
 import com.example.apilist.viewmodel.APIViewModel
@@ -152,9 +150,9 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp
                 )
-                IconButton(onClick = { favorite = !favorite
-                                        if (favorite) {myViewModel.saveAsFavorite(Pokemon(card.data.id, card.data.name, card.data.types, card.data.level))}
-                                        else {myViewModel.deleteFavorite((Pokemon(card.data.id, card.data.name, card.data.types, card.data.level)))}}) {
+                IconButton(onClick = {
+                                        if (favorite) {myViewModel.saveAsFavorite(card.data)}
+                                        else {myViewModel.deleteFavorite((card.data))}}) {
                     Icon(imageVector = icon, contentDescription = "Favorito", tint = Color.Red, modifier = Modifier.size(50.dp))
                 }
             }
