@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -89,8 +87,6 @@ fun DetailScreen(navController: NavController, myViewModel: APIViewModel) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
-    var favorite = false
-    val icon = if (favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
     Card(
         border = BorderStroke(2.dp, Color.LightGray),
         shape = RoundedCornerShape(8.dp),
@@ -151,9 +147,8 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                     fontSize = 30.sp
                 )
                 IconButton(onClick = {
-                                        if (favorite) {myViewModel.saveAsFavorite(card.data)}
-                                        else {myViewModel.deleteFavorite((card.data))}}) {
-                    Icon(imageVector = icon, contentDescription = "Favorito", tint = Color.Red, modifier = Modifier.size(50.dp))
+                                      myViewModel.agregarFavoritos(false) == myViewModel.agregarFavoritos(true)  }) {
+                    Icon(imageVector = myViewModel.favIconList, contentDescription = "Favorito", tint = Color.Red, modifier = Modifier.size(50.dp))
                 }
             }
         }

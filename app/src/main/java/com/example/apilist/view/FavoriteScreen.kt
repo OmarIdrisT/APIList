@@ -48,6 +48,7 @@ fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
                     modifier = Modifier.zIndex(0f)
 
                 )
+                myViewModel.getFavorites()
             }
         }
     )
