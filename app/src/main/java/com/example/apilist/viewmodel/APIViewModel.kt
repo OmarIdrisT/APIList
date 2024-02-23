@@ -63,16 +63,6 @@ class APIViewModel: ViewModel() {
         this.id=identificar
     }
 
-    var favAdded : Boolean by mutableStateOf(false)
-        private set
-
-    var favIconList = if(favAdded) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-
-    fun agregarFavoritos(valor: Boolean){
-        favAdded = valor
-        favIconList = if(favAdded) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-    }
-
     private val _isFavorite = MutableLiveData(false)
     val isFavorite = _isFavorite
     private val _favorites = MutableLiveData<MutableList<Data>>()
@@ -100,12 +90,14 @@ class APIViewModel: ViewModel() {
     fun saveAsFavorite(pokemon: Data) {
         CoroutineScope(Dispatchers.IO).launch {
             repository.saveAsFavorite(pokemon)
+            _isFavorite.postValue(true)
         }
     }
 
     fun deleteFavorite(pokemon: Data) {
         CoroutineScope(Dispatchers.IO).launch {
             repository.deleteFavorite(pokemon)
+            _isFavorite.postValue(false)
         }
     }
 }

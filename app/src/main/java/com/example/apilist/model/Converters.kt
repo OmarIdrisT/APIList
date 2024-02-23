@@ -4,21 +4,32 @@ import androidx.room.TypeConverter
 
 class Converters {
     @TypeConverter
-    fun fromListToString(list: List<String>) : String {
-        return list.joinToString(",")
+    fun fromListToString(list: List<String>?) : String {
+        val result : String
+        if (list != null){
+            result = list.joinToString(",")
+        }
+        else {
+            result = ""
+        }
+        return result
     }
 
     @TypeConverter
-    fun fromStringToList(string:String) : List<String> {
-        return string.split(",")
+    fun fromStringToList(string:String?) : List<String> {
+        var result : List<String> = emptyList()
+        if (string != null) {
+            result = string.split(",")
+        }
+        return result
     }
 
-    @TypeConverter
+    /*@TypeConverter
     fun fromAbilityToString(pep: Ability) : String {
         return "${pep.name},${pep.text},${pep.type}"
-    }
+    }*/
 
-    @TypeConverter
+ /*   @TypeConverter
     fun fromStringToAbility(string:String) : Ability {
         val name=string.split(",")[0]
         val text=string.split(",")[1]
@@ -30,36 +41,36 @@ class Converters {
     fun fromAbilityListToString(ability: List<Ability>) : String {
         val stringList = mutableListOf<String>()
         for (i in 0 until ability.size) {
-            stringList[i] = ability[i].toString()
+            stringList.add(ability[i].toString())
         }
         return fromListToString(stringList)
     }
-
-    @TypeConverter
+*/
+    /*@TypeConverter
     fun fromStringToAbilityList(string:String) : List<Ability> {
         val stringList = string.split(";")
         return stringList.map { fromStringToAbility(it) }
-    }
+    }*/
 
-    @TypeConverter
+    /*@TypeConverter
     fun fromAttackToString(attack: Attack) : String {
         return "${attack.convertedEnergyCost},${attack.damage},${attack.name},${attack.text}"
-    }
+    }*/
 
-    @TypeConverter
+    /*@TypeConverter
     fun fromStringToAttack(string:String) : Attack {
         val energyCost=string.split(",")[0].toInt()
         val damage=string.split(",")[1]
         val name=string.split(",")[2]
         val text=string.split(",")[3]
         return Attack(energyCost, damage, name, text)
-    }
+    }*/
 
-    @TypeConverter
+    /*@TypeConverter
     fun fromAttackListToString(attack: List<Attack>) : String {
         val stringList = mutableListOf<String>()
         for (i in 0 until attack.size) {
-            stringList[i] = attack[i].toString()
+            stringList.add(attack[i].toString())
         }
         return fromListToString(stringList)
     }
@@ -68,7 +79,7 @@ class Converters {
     fun fromStringToAttackList(string:String) : List<Attack> {
         val stringList = string.split(";")
         return stringList.map { fromStringToAttack(it) }
-    }
+    }*/
 
     @TypeConverter
     fun fromIntListToString(nationalDexNumbers: List<Int>) : String {
@@ -82,7 +93,7 @@ class Converters {
         return intList
     }
 
-    @TypeConverter
+    /*@TypeConverter
     fun fromResistanceToString(resistance: Resistance) : String {
         return "${resistance.type},${resistance.value}"
     }
@@ -98,7 +109,7 @@ class Converters {
     fun fromResistanceListToString(resistance: List<Resistance>) : String {
         val stringList = mutableListOf<String>()
         for (i in 0 until resistance.size) {
-            stringList[i] = resistance[i].toString()
+            stringList.add(resistance[i].toString())
         }
         return fromListToString(stringList)
     }
@@ -125,7 +136,7 @@ class Converters {
     fun fromWeaknesseListToString(weaknesse: List<Weaknesse>) : String {
         val stringList = mutableListOf<String>()
         for (i in 0 until weaknesse.size) {
-            stringList[i] = weaknesse[i].toString()
+            stringList.add(weaknesse[i].toString())
         }
         return fromListToString(stringList)
     }
@@ -134,7 +145,7 @@ class Converters {
     fun fromStringToWeaknesseList(string:String) : List<Weaknesse> {
         val stringList = string.split(";")
         return stringList.map { fromStringToWeaknesse(it) }
-    }
+    }*/
 
     @TypeConverter
     fun fromImagesToString(images: Images) : String {

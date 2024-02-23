@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -58,7 +60,7 @@ fun DetailScreen(navController: NavController, myViewModel: APIViewModel) {
     )
     val loading = myViewModel.loading.observeAsState()
     myViewModel.getCardById()
-    val card : PokemonDetails by myViewModel.cardDetails.observeAsState(PokemonDetails(Data(emptyList(), emptyList(), 0, "", emptyList(), "", "", "", Images("",""), "", "", emptyList(), "", "", "", emptyList(), emptyList(), emptyList(), emptyList(), "", emptyList(), emptyList())))
+    val card : PokemonDetails by myViewModel.cardDetails.observeAsState(PokemonDetails(Data(0, "", emptyList(), "", "", "", Images("",""), "", "", emptyList(), "", "", "", emptyList(), emptyList(), emptyList(), "", emptyList())))
     Scaffold(
         topBar = { DetailTopAppBar(navController) },
         bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
@@ -87,6 +89,9 @@ fun DetailScreen(navController: NavController, myViewModel: APIViewModel) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
+    val favorito by myViewModel.isFavorite.observeAsState(false)
+    myViewModel.isFavorite(card.data)
+    val favIcon = if(favorito) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
     Card(
         border = BorderStroke(2.dp, Color.LightGray),
         shape = RoundedCornerShape(8.dp),
@@ -131,8 +136,6 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                         textAlign = TextAlign.Center
                     )
                 }
-
-
             }
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -147,8 +150,14 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                     fontSize = 30.sp
                 )
                 IconButton(onClick = {
-                                      myViewModel.agregarFavoritos(false) == myViewModel.agregarFavoritos(true)  }) {
-                    Icon(imageVector = myViewModel.favIconList, contentDescription = "Favorito", tint = Color.Red, modifier = Modifier.size(50.dp))
+                    myViewModel.isFavorite(card.data)
+                    if (!favorito) {
+                        myViewModel.saveAsFavorite(card.data)
+                    }else {
+                        myViewModel.deleteFavorite(card.data)
+                    }
+                }){
+                    Icon(imageVector = favIcon, contentDescription = "Favorito", tint = Color.Red, modifier = Modifier.size(50.dp))
                 }
             }
         }

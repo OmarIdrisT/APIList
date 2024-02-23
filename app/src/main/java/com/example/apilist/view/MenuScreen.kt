@@ -118,7 +118,6 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel) {
-    var isFav by remember { mutableStateOf(false) }
     var rareza = if (card.rarity == null) "" else card.rarity
     Card(
         border = BorderStroke(2.dp, Color.LightGray),
