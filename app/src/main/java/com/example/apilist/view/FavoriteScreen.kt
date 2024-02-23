@@ -1,5 +1,7 @@
 package com.example.apilist.view
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +30,7 @@ import com.example.apilist.api.Repository
 import com.example.apilist.model.BottomNavigationScreen
 import com.example.apilist.viewmodel.APIViewModel
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {

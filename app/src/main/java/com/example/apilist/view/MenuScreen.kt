@@ -1,6 +1,8 @@
 package com.example.apilist.view
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -36,14 +37,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -58,6 +58,7 @@ import com.example.apilist.model.Data
 import com.example.apilist.navigation.Routes
 import com.example.apilist.viewmodel.APIViewModel
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,6 +89,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
@@ -115,6 +117,7 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel) {
@@ -144,6 +147,7 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
             Text(
                 text = "${card.name} \n$rareza",
                 style = MaterialTheme.typography.bodyLarge,
+                fontFamily = FontFamily(Font(R.font.hiro)),
                 color = Color.White,
                 textAlign = TextAlign.Center, modifier = Modifier
                     .fillMaxSize()
@@ -158,7 +162,7 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
 @Composable
 fun MenuTopAppBar() {
     TopAppBar(
-        title = { Text(text = "Card List") },
+        title = { Text(text = "Card List", fontFamily = FontFamily(Font(R.font.unown))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
