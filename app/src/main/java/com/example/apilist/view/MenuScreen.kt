@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -31,14 +33,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -60,7 +67,6 @@ import com.example.apilist.viewmodel.APIViewModel
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
     val bottomNavigationItems = listOf(
@@ -69,7 +75,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
 
     )
     Scaffold(
-        topBar = { MenuTopAppBar() },
+        topBar = { MenuTopAppBar(myViewModel) },
         bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
@@ -157,21 +163,25 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
     }
 }
 
-
+var showSearchBar by mutableStateOf(false)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuTopAppBar() {
+fun MenuTopAppBar(myViewModel: APIViewModel) {
     TopAppBar(
-        title = { Text(text = "Card List", fontFamily = FontFamily(Font(R.font.unown))) },
+        title = { Text(text = "Card List", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
             actionIconContentColor = Color.White
         ),
         actions = {
-            IconButton(onClick = {}) {
+            if (showSearchBar) {
+                MySearchBar(APIViewModel())
+            }
+            IconButton(onClick = { showSearchBar = true}) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
             }
+
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Menu")
             }
@@ -201,5 +211,24 @@ fun MyBottomBar(
                 }
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MySearchBar (myViewModel: APIViewModel) {
+    val searchText by myViewModel.searchText.observeAsState("")
+    SearchBar(
+        colors = SearchBarDefaults.colors(Color.Black),
+        query = searchText,
+        onQueryChange = { myViewModel.onSearchTextChange(it) },
+        onSearch = { myViewModel.onSearchTextChange(it) },
+        trailingIcon = { Icon( imageVector = Icons.Filled.Search, contentDescription = "CloseSearch", tint = Color.White, modifier = Modifier.clickable {showSearchBar = false})},
+        active = true,
+        placeholder = { Text(text = "Search...", fontFamily = FontFamily(Font(R.font.pokemon)), color = Color.White) },
+        onActiveChange = {},
+        modifier = Modifier
+            .fillMaxHeight(0.1f)
+            .clip(CircleShape)) {
     }
 }

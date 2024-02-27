@@ -1,9 +1,6 @@
 package com.example.apilist.viewmodel
 
 import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Collections.addAll
 
 class APIViewModel: ViewModel() {
 
@@ -100,4 +98,15 @@ class APIViewModel: ViewModel() {
             _isFavorite.postValue(false)
         }
     }
+    private var _searchText = MutableLiveData<String>()
+    val searchText = _searchText
+    private var _showSearchBar : Boolean by mutableStateOf(false)
+
+    val cardsFromAPI = MutableLiveData<CardList>()
+    fun onSearchTextChange(text: String) {
+
+    }
+        
 }
+
+
