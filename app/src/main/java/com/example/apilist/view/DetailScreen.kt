@@ -143,7 +143,7 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "${card.data.name}",
+                    text = card.data.name,
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.White,
                     textAlign = TextAlign.Center,

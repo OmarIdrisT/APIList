@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -45,7 +46,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -73,10 +73,9 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
     val bottomNavigationItems = listOf(
         BottomNavigationScreen.Home,
         BottomNavigationScreen.Favorite
-
     )
     Scaffold(
-        topBar = { MenuTopAppBar(myViewModel) },
+        topBar = { MenuTopAppBar() },
         bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
@@ -87,7 +86,6 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier.zIndex(0f)
-
                 )
                 MyRecyclerView(myViewModel = myViewModel, navController = navController)
             }
@@ -99,6 +97,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
+    val searchText: String by myViewModel.searchText.observeAsState("")
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
     val cards: CardList by myViewModel.cards.observeAsState(CardList(0, emptyList(), 0, 0, 0))
     myViewModel.getCards()
@@ -114,8 +113,9 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
             )
         }
     } else {
+        val filteredCards = cards.data.filter{ it.name.contains(searchText, ignoreCase = true) }
         LazyColumn() {
-            items(cards.data) {
+            items(filteredCards) {
                 CardItem(card = it, navController, myViewModel)
             }
 
@@ -124,6 +124,7 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
 }
 
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -140,12 +141,7 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
             myViewModel.setIDx(card.id)
             navController.navigate(Routes.DetailScreen.route)}
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = typeIcon),
-                contentDescription = null,
-                modifier = Modifier.alpha(0.3f).fillMaxSize(0.4f)
-            )
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier
                     .padding(16.dp)
@@ -170,14 +166,13 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
                 )
             }
         }
-
     }
 }
 
 var showSearchBar by mutableStateOf(false)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuTopAppBar(myViewModel: APIViewModel) {
+fun MenuTopAppBar() {
     TopAppBar(
         title = { Text(text = "Card List", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -228,12 +223,12 @@ fun MyBottomBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MySearchBar (myViewModel: APIViewModel) {
-    val searchText by myViewModel.searchText.observeAsState("")
+    val searchText: String by myViewModel.searchText.observeAsState("")
     SearchBar(
         colors = SearchBarDefaults.colors(Color.Black),
         query = searchText,
-        onQueryChange = { myViewModel.GetSearchedCards(it) },
-        onSearch = { myViewModel.GetSearchedCards(it) },
+        onQueryChange = { myViewModel.onSearchTextChange(it) },
+        onSearch = { myViewModel.onSearchTextChange(it) },
         trailingIcon = { Icon( imageVector = Icons.Filled.Search, contentDescription = "CloseSearch", tint = Color.White, modifier = Modifier.clickable {showSearchBar = false})},
         active = true,
         placeholder = { Text(text = "Search...", fontFamily = FontFamily(Font(R.font.pokemon)), color = Color.White) },

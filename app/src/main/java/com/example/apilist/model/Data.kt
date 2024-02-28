@@ -19,7 +19,7 @@ data class Data(
     val id: String,
     val images: Images,
     val level: String?,
-    val name: String?,
+    val name: String,
     val nationalPokedexNumbers: List<Int>?,
     val number: String?,
     var rarity: String?,

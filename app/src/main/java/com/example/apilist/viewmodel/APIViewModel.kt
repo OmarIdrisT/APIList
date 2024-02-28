@@ -138,6 +138,10 @@ class APIViewModel: ViewModel() {
             }
         }
     }
+
+    fun onSearchTextChange(text: String) {
+        _searchText.value = text
+    }
         
 }
 
