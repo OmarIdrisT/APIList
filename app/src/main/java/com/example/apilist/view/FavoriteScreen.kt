@@ -31,7 +31,6 @@ import com.example.apilist.model.BottomNavigationScreen
 import com.example.apilist.viewmodel.APIViewModel
 
 @RequiresApi(Build.VERSION_CODES.Q)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
     val bottomNavigationItems = listOf(

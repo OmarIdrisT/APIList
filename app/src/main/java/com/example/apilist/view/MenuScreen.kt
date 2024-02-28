@@ -54,6 +54,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -97,7 +98,6 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
-    val searchText: String by myViewModel.searchText.observeAsState("")
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
     val cards: CardList by myViewModel.cards.observeAsState(CardList(0, emptyList(), 0, 0, 0))
     myViewModel.getCards()
@@ -113,6 +113,7 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
             )
         }
     } else {
+        val searchText: String by myViewModel.searchText.observeAsState("")
         val filteredCards = cards.data.filter{ it.name.contains(searchText, ignoreCase = true) }
         LazyColumn() {
             items(filteredCards) {
@@ -132,38 +133,50 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
     var rareza = if (card.rarity == null) "" else card.rarity
     var type = card.types?.get(0).toString()
     var typeIcon = myViewModel.pickIcon(type)
-    Card(
-        border = BorderStroke(2.dp, Color.LightGray),
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(8.dp),
-        colors = CardDefaults.cardColors(Color.DarkGray.copy(alpha = 0.6f)),
-        onClick = {
-            myViewModel.setIDx(card.id)
-            navController.navigate(Routes.DetailScreen.route)}
-    ) {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                GlideImage(
-                    model = card.images.large,
-                    contentDescription = "Card Image",
-                    contentScale = ContentScale.FillHeight,
-                    modifier = Modifier.size(150.dp)
-                )
-                Text(
-                    text = "${card.name} \n$rareza",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontFamily = FontFamily(Font(R.font.hiro)),
-                    color = Color.White,
-                    textAlign = TextAlign.Center, modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
+    Box(modifier = Modifier
+        .padding(8.dp)
+        .fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        Image(
+            painter = painterResource(id = typeIcon),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            alpha = 0.6f
+        )
+        Card(
+            border = BorderStroke(2.dp, Color.LightGray),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.padding(8.dp),
+            colors = CardDefaults.cardColors(Color.DarkGray.copy(alpha = 0.6f)),
+            onClick = {
+                myViewModel.setIDx(card.id)
+                navController.navigate(Routes.DetailScreen.route)}
+        ) {
+            BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    GlideImage(
+                        model = card.images.large,
+                        contentDescription = "Card Image",
+                        contentScale = ContentScale.FillHeight,
+                        modifier = Modifier.size(150.dp)
+                    )
+                    Text(
+                        text = "${card.name} \n$rareza",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontFamily = FontFamily(Font(R.font.hiro)),
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center, modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f)
+                    )
+                }
             }
         }
     }
