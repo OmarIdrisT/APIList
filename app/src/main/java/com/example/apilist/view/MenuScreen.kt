@@ -40,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -71,6 +72,7 @@ import com.example.apilist.viewmodel.APIViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
+    val searchText: String by myViewModel.searchText.observeAsState("")
     val bottomNavigationItems = listOf(
         BottomNavigationScreen.Home,
         BottomNavigationScreen.Favorite
@@ -88,7 +90,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier.zIndex(0f)
                 )
-                MyRecyclerView(myViewModel = myViewModel, navController = navController)
+                MyRecyclerView(myViewModel = myViewModel, navController = navController,searchText = searchText)
             }
         }
     )
@@ -97,7 +99,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
+fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController, searchText: String) {
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
     val cards: CardList by myViewModel.cards.observeAsState(CardList(0, emptyList(), 0, 0, 0))
     myViewModel.getCards()
@@ -113,7 +115,6 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
             )
         }
     } else {
-        val searchText: String by myViewModel.searchText.observeAsState("")
         val filteredCards = cards.data.filter{ it.name.contains(searchText, ignoreCase = true) }
         LazyColumn() {
             items(filteredCards) {
