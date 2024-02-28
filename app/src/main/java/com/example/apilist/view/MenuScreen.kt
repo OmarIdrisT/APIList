@@ -45,6 +45,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -128,6 +129,8 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
 @Composable
 fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel) {
     var rareza = if (card.rarity == null) "" else card.rarity
+    var type = card.types?.get(0).toString()
+    var typeIcon = myViewModel.pickIcon(type)
     Card(
         border = BorderStroke(2.dp, Color.LightGray),
         shape = RoundedCornerShape(8.dp),
@@ -137,29 +140,37 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
             myViewModel.setIDx(card.id)
             navController.navigate(Routes.DetailScreen.route)}
     ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            GlideImage(
-                model = card.images.large,
-                contentDescription = "Card Image",
-                contentScale = ContentScale.FillHeight,
-                modifier = Modifier.size(100.dp)
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = typeIcon),
+                contentDescription = null,
+                modifier = Modifier.alpha(0.3f).fillMaxSize(0.4f)
             )
-            Text(
-                text = "${card.name} \n$rareza",
-                style = MaterialTheme.typography.bodyLarge,
-                fontFamily = FontFamily(Font(R.font.hiro)),
-                color = Color.White,
-                textAlign = TextAlign.Center, modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-            )
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                GlideImage(
+                    model = card.images.large,
+                    contentDescription = "Card Image",
+                    contentScale = ContentScale.FillHeight,
+                    modifier = Modifier.size(150.dp)
+                )
+                Text(
+                    text = "${card.name} \n$rareza",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontFamily = FontFamily(Font(R.font.hiro)),
+                    color = Color.White,
+                    textAlign = TextAlign.Center, modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                )
+            }
         }
+
     }
 }
 
@@ -221,8 +232,8 @@ fun MySearchBar (myViewModel: APIViewModel) {
     SearchBar(
         colors = SearchBarDefaults.colors(Color.Black),
         query = searchText,
-        onQueryChange = { myViewModel.onSearchTextChange(it) },
-        onSearch = { myViewModel.onSearchTextChange(it) },
+        onQueryChange = { myViewModel.GetSearchedCards(it) },
+        onSearch = { myViewModel.GetSearchedCards(it) },
         trailingIcon = { Icon( imageVector = Icons.Filled.Search, contentDescription = "CloseSearch", tint = Color.White, modifier = Modifier.clickable {showSearchBar = false})},
         active = true,
         placeholder = { Text(text = "Search...", fontFamily = FontFamily(Font(R.font.pokemon)), color = Color.White) },

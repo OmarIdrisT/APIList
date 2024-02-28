@@ -12,9 +12,11 @@ class Repository {
 
     suspend fun getAllCards() = apiInterface.getCards()
     suspend fun getCardsById(id: String) = apiInterface.getCardById(id)
+    suspend fun getFilteredCards(searchPokemon:String) = apiInterface.getSearchedCards(searchPokemon)
 
     suspend fun saveAsFavorite(pokemon: Data) = daoInterfase.addPokemon(pokemon)
     suspend fun deleteFavorite(pokemon: Data) = daoInterfase.deletePokemon(pokemon)
     suspend fun isFavorite(pokemon: Data) = daoInterfase.getCardsById(pokemon.id).isNotEmpty()
     suspend fun getFavorites() = daoInterfase.getCards()
+
 }

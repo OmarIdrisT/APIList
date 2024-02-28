@@ -1,11 +1,13 @@
 package com.example.apilist.viewmodel
 
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.apilist.R
 import com.example.apilist.api.Repository
 import com.example.apilist.model.CardList
 import com.example.apilist.model.Data
@@ -14,7 +16,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Collections.addAll
 
 class APIViewModel: ViewModel() {
 
@@ -23,6 +24,35 @@ class APIViewModel: ViewModel() {
     val loading = _loading
     private val _cards = MutableLiveData<CardList>()
     val cards = _cards
+
+    private var _cardDetails = MutableLiveData<PokemonDetails>()
+    val cardDetails = _cardDetails
+    var id: String = ""
+
+    fun pickIcon(type: String) : Int {
+        val typeIcon = when (type) {
+            "Grass" -> R.drawable.grass
+            "Fire" -> R.drawable.fire
+            "Water" -> R.drawable.water
+            "Lightning" -> R.drawable.lightning
+            "Fighting" -> R.drawable.fighting
+            "Psychic" -> R.drawable.psychic
+            "Darkness" -> R.drawable.darkness
+            "Metal" -> R.drawable.steel
+            "Dragon" -> R.drawable.dragon
+            else -> R.drawable.colorless
+        }
+        return typeIcon
+    }
+
+
+    private val _isFavorite = MutableLiveData(false)
+    val isFavorite = _isFavorite
+    private val _favorites = MutableLiveData<MutableList<Data>>()
+    val favorites = _favorites
+
+    private var _searchText = MutableLiveData<String>()
+    val searchText = _searchText
 
     fun getCards(){
         CoroutineScope(Dispatchers.IO).launch {
@@ -39,9 +69,7 @@ class APIViewModel: ViewModel() {
         }
     }
 
-    private var _cardDetails = MutableLiveData<PokemonDetails>()
-    val cardDetails = _cardDetails
-    var id: String = ""
+
 
     fun getCardById() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -60,11 +88,6 @@ class APIViewModel: ViewModel() {
     fun setIDx(identificar:String){
         this.id=identificar
     }
-
-    private val _isFavorite = MutableLiveData(false)
-    val isFavorite = _isFavorite
-    private val _favorites = MutableLiveData<MutableList<Data>>()
-    val favorites = _favorites
 
     fun getFavorites() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -98,13 +121,22 @@ class APIViewModel: ViewModel() {
             _isFavorite.postValue(false)
         }
     }
-    private var _searchText = MutableLiveData<String>()
-    val searchText = _searchText
-    private var _showSearchBar : Boolean by mutableStateOf(false)
 
-    val cardsFromAPI = MutableLiveData<CardList>()
-    fun onSearchTextChange(text: String) {
-
+    fun GetSearchedCards(searchPokemon : String) {
+        _searchText.value = searchPokemon
+        val searchPokemonUpdated = "=name:$searchPokemon*"
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = repository.getFilteredCards(searchPokemonUpdated)
+            withContext(Dispatchers.Main) {
+                if(response.isSuccessful){
+                    _cards.value = response.body()
+                    _loading.value = false
+                }
+                else{
+                    Log.e("Error :", response.message())
+                }
+            }
+        }
     }
         
 }
