@@ -194,7 +194,7 @@ fun MenuTopAppBar(myViewModel: APIViewModel) {
             if (showSearchBar) {
                 MySearchBar(APIViewModel())
             }
-            IconButton(onClick = { myViewModel.deploySearchBar(true)}) {
+            IconButton(onClick = { myViewModel.deploySearchBar() }) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
             }
         }
@@ -230,7 +230,6 @@ fun MyBottomBar(
 @Composable
 fun MySearchBar (myViewModel: APIViewModel) {
     val searchText: String by myViewModel.searchText.observeAsState("")
-    val showSearchBar by myViewModel.showSearchBar.observeAsState(false)
     SearchBar(
         colors = SearchBarDefaults.colors(Color.Black, inputFieldColors = TextFieldDefaults.colors(Color.White)),
         query = searchText,
@@ -242,7 +241,7 @@ fun MySearchBar (myViewModel: APIViewModel) {
                 contentDescription = "CloseSearch",
                 tint = Color.White,
                 modifier = Modifier.clickable {
-                    myViewModel.deploySearchBar(showSearchBar)
+                    myViewModel.deploySearchBar()
                     myViewModel.onSearchTextChange("")
                 })
         },

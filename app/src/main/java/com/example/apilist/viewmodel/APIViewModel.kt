@@ -1,9 +1,6 @@
 package com.example.apilist.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.apilist.R
@@ -147,8 +144,8 @@ class APIViewModel: ViewModel() {
         }
     }
 
-    fun deploySearchBar(estaActivada : Boolean) {
-        _showSearchBar.value = estaActivada
+    fun deploySearchBar() {
+        _showSearchBar.value = !_showSearchBar.value!!
     }
 
     fun onSearchTextChange(text: String) {

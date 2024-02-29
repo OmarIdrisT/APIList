@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,8 +29,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.apilist.R
-import com.example.apilist.api.Repository
-import com.example.apilist.model.BottomNavigationScreen
 import com.example.apilist.viewmodel.APIViewModel
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -81,7 +78,7 @@ fun FavoriteTopBar(myViewModel: APIViewModel) {
             if (showSearchBar) {
                 MySearchBar(APIViewModel())
             }
-            IconButton(onClick = { myViewModel.deploySearchBar(true)}) {
+            IconButton(onClick = { myViewModel.deploySearchBar() }) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
             }
         }
