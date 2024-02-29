@@ -1,10 +1,6 @@
 package com.example.apilist.viewmodel
 
-import android.graphics.drawable.Drawable
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.apilist.R
@@ -122,7 +118,7 @@ class APIViewModel: ViewModel() {
         }
     }
 
-    fun GetSearchedCards(searchPokemon : String) {
+    fun getSearchedCards(searchPokemon : String) {
         _searchText.value = searchPokemon
         val searchPokemonUpdated = "=name:$searchPokemon*"
         CoroutineScope(Dispatchers.IO).launch {
@@ -141,6 +137,7 @@ class APIViewModel: ViewModel() {
 
     fun onSearchTextChange(text: String) {
         _searchText.value = text
+
     }
         
 }

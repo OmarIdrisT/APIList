@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -37,6 +38,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -239,7 +241,7 @@ fun MyBottomBar(
 fun MySearchBar (myViewModel: APIViewModel) {
     val searchText: String by myViewModel.searchText.observeAsState("")
     SearchBar(
-        colors = SearchBarDefaults.colors(Color.Black),
+        colors = SearchBarDefaults.colors(Color.Black, inputFieldColors = TextFieldDefaults.colors(Color.White)),
         query = searchText,
         onQueryChange = { myViewModel.onSearchTextChange(it) },
         onSearch = { myViewModel.onSearchTextChange(it) },
