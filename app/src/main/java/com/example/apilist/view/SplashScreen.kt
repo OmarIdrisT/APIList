@@ -58,7 +58,7 @@ fun Splash(alphaAnim: Float) {
                 horizontalArrangement = Arrangement.Center
             ) {
                     Text(
-                        text = "POKEMON TCG CARD LIST",
+                        text = "PoKéMoN TCG",
                         color = Color.White,
                         fontFamily = FontFamily(Font(R.font.pokemon))
                     )

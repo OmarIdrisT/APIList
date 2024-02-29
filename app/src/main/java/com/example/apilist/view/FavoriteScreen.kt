@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.apilist.R
@@ -70,7 +72,7 @@ fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
 @Composable
 fun FavoriteTopBar() {
     TopAppBar(
-        title = { Text(text = "Favorite list") },
+        title = { Text(text = "Favorites", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,

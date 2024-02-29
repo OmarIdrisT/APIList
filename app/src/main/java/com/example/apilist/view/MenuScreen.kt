@@ -46,6 +46,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -220,11 +221,11 @@ fun MyBottomBar(
         val navBackStackEntry by navigationController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         bottomNavigationItems.forEach { item ->
+            val selectedColor = if(currentRoute == item.route) Color.Green else Color.White
             BottomNavigationItem(
-                icon = { Icon(item.icon, contentDescription = item.label, tint = Color.White)},
-                label = { Text(text = item.label, color = Color.White) },
+                icon = { Icon(item.icon, contentDescription = item.label, tint = selectedColor)},
+                label = { Text(text = item.label, color = selectedColor, fontFamily = FontFamily(Font(R.font.pokemon)))},
                 selected = currentRoute == item.route,
-
                 alwaysShowLabel = false,
                 onClick = {
                     if (currentRoute != item.route) {
@@ -245,7 +246,14 @@ fun MySearchBar (myViewModel: APIViewModel) {
         query = searchText,
         onQueryChange = { myViewModel.onSearchTextChange(it) },
         onSearch = { myViewModel.onSearchTextChange(it) },
-        trailingIcon = { Icon( imageVector = Icons.Filled.Search, contentDescription = "CloseSearch", tint = Color.White, modifier = Modifier.clickable {showSearchBar = false})},
+        trailingIcon = { Icon(
+            imageVector = Icons.Filled.Search,
+            contentDescription = "CloseSearch",
+            tint = Color.White,
+            modifier = Modifier.clickable {
+                showSearchBar = false
+                myViewModel.onSearchTextChange("")
+            })},
         active = true,
         placeholder = { Text(text = "Search...", fontFamily = FontFamily(Font(R.font.pokemon)), color = Color.White) },
         onActiveChange = {},
