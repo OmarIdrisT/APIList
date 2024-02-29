@@ -1,10 +1,14 @@
 package com.example.apilist.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.apilist.R
 import com.example.apilist.api.Repository
+import com.example.apilist.model.BottomNavigationScreen
 import com.example.apilist.model.CardList
 import com.example.apilist.model.Data
 import com.example.apilist.model.PokemonDetails
@@ -20,6 +24,11 @@ class APIViewModel: ViewModel() {
     val loading = _loading
     private val _cards = MutableLiveData<CardList>()
     val cards = _cards
+
+    val bottomNavigationItems = listOf(
+        BottomNavigationScreen.Home,
+        BottomNavigationScreen.Favorite
+    )
 
     private var _cardDetails = MutableLiveData<PokemonDetails>()
     val cardDetails = _cardDetails
@@ -46,6 +55,9 @@ class APIViewModel: ViewModel() {
     val isFavorite = _isFavorite
     private val _favorites = MutableLiveData<MutableList<Data>>()
     val favorites = _favorites
+
+    private val _showSearchBar = MutableLiveData(false)
+    var showSearchBar = _showSearchBar
 
     private var _searchText = MutableLiveData<String>()
     val searchText = _searchText
@@ -133,6 +145,10 @@ class APIViewModel: ViewModel() {
                 }
             }
         }
+    }
+
+    fun deploySearchBar(estaActivada : Boolean) {
+        _showSearchBar.value = estaActivada
     }
 
     fun onSearchTextChange(text: String) {

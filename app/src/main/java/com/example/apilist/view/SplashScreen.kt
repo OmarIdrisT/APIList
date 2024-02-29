@@ -26,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.apilist.R
 import com.example.apilist.navigation.Routes
@@ -60,7 +61,8 @@ fun Splash(alphaAnim: Float) {
                     Text(
                         text = "PoKéMoN TCG",
                         color = Color.White,
-                        fontFamily = FontFamily(Font(R.font.pokemon))
+                        fontFamily = FontFamily(Font(R.font.pokemon)),
+                        fontSize = 30.sp
                     )
             }
         }

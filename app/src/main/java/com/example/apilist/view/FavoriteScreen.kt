@@ -19,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -35,13 +37,9 @@ import com.example.apilist.viewmodel.APIViewModel
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
-    val bottomNavigationItems = listOf(
-        BottomNavigationScreen.Home,
-        BottomNavigationScreen.Favorite
-
-    )
+    val bottomNavigationItems = myViewModel.bottomNavigationItems
     Scaffold(
-        topBar = { FavoriteTopBar() },
+        topBar = { FavoriteTopBar(myViewModel) },
         bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
@@ -70,20 +68,21 @@ fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteTopBar() {
+fun FavoriteTopBar(myViewModel: APIViewModel) {
+    val showSearchBar: Boolean by myViewModel.showSearchBar.observeAsState(false)
     TopAppBar(
-        title = { Text(text = "Favorites", fontFamily = FontFamily(Font(R.font.pokemon))) },
+        title = { Text(text = "Favorite", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
             actionIconContentColor = Color.White
         ),
         actions = {
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
+            if (showSearchBar) {
+                MySearchBar(APIViewModel())
             }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Menu")
+            IconButton(onClick = { myViewModel.deploySearchBar(true)}) {
+                Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
             }
         }
     )

@@ -56,10 +56,7 @@ import com.example.apilist.viewmodel.APIViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavController, myViewModel: APIViewModel) {
-    val bottomNavigationItems = listOf(
-        BottomNavigationScreen.Home,
-        BottomNavigationScreen.Favorite
-    )
+    val bottomNavigationItems = myViewModel.bottomNavigationItems
     val loading = myViewModel.loading.observeAsState()
     myViewModel.getCardById()
     val card : PokemonDetails by myViewModel.cardDetails.observeAsState(PokemonDetails(Data(0, "", emptyList(), "", "", "", Images("",""), "", "", emptyList(), "", "", "", emptyList(), emptyList(), emptyList(), "", emptyList())))

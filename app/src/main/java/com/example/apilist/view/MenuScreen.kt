@@ -23,9 +23,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,12 +41,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,12 +71,9 @@ import com.example.apilist.viewmodel.APIViewModel
 @Composable
 fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
     val searchText: String by myViewModel.searchText.observeAsState("")
-    val bottomNavigationItems = listOf(
-        BottomNavigationScreen.Home,
-        BottomNavigationScreen.Favorite
-    )
+    val bottomNavigationItems = myViewModel.bottomNavigationItems
     Scaffold(
-        topBar = { MenuTopAppBar() },
+        topBar = { MenuTopAppBar(myViewModel) },
         bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
@@ -186,10 +178,11 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
     }
 }
 
-var showSearchBar by mutableStateOf(false)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuTopAppBar() {
+fun MenuTopAppBar(myViewModel: APIViewModel) {
+    val showSearchBar: Boolean by myViewModel.showSearchBar.observeAsState(false)
     TopAppBar(
         title = { Text(text = "Card List", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -201,12 +194,8 @@ fun MenuTopAppBar() {
             if (showSearchBar) {
                 MySearchBar(APIViewModel())
             }
-            IconButton(onClick = { showSearchBar = true}) {
+            IconButton(onClick = { myViewModel.deploySearchBar(true)}) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
-            }
-
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Menu")
             }
         }
     )
@@ -241,19 +230,22 @@ fun MyBottomBar(
 @Composable
 fun MySearchBar (myViewModel: APIViewModel) {
     val searchText: String by myViewModel.searchText.observeAsState("")
+    val showSearchBar by myViewModel.showSearchBar.observeAsState(false)
     SearchBar(
         colors = SearchBarDefaults.colors(Color.Black, inputFieldColors = TextFieldDefaults.colors(Color.White)),
         query = searchText,
         onQueryChange = { myViewModel.onSearchTextChange(it) },
         onSearch = { myViewModel.onSearchTextChange(it) },
-        trailingIcon = { Icon(
-            imageVector = Icons.Filled.Search,
-            contentDescription = "CloseSearch",
-            tint = Color.White,
-            modifier = Modifier.clickable {
-                showSearchBar = false
-                myViewModel.onSearchTextChange("")
-            })},
+        trailingIcon = {
+                Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "CloseSearch",
+                tint = Color.White,
+                modifier = Modifier.clickable {
+                    myViewModel.deploySearchBar(showSearchBar)
+                    myViewModel.onSearchTextChange("")
+                })
+        },
         active = true,
         placeholder = { Text(text = "Search...", fontFamily = FontFamily(Font(R.font.pokemon)), color = Color.White) },
         onActiveChange = {},
