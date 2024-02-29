@@ -230,6 +230,7 @@ fun MyBottomBar(
 @Composable
 fun MySearchBar (myViewModel: APIViewModel) {
     val searchText: String by myViewModel.searchText.observeAsState("")
+    val showSearchBar: Boolean by myViewModel.showSearchBar.observeAsState(true)
     SearchBar(
         colors = SearchBarDefaults.colors(Color.Black, inputFieldColors = TextFieldDefaults.colors(Color.White)),
         query = searchText,
@@ -241,7 +242,9 @@ fun MySearchBar (myViewModel: APIViewModel) {
                 contentDescription = "CloseSearch",
                 tint = Color.White,
                 modifier = Modifier.clickable {
-                    myViewModel.deploySearchBar()
+                    if (showSearchBar) {
+                        myViewModel.deploySearchBar()
+                    }
                     myViewModel.onSearchTextChange("")
                 })
         },
