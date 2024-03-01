@@ -37,7 +37,7 @@ fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
     val bottomNavigationItems = myViewModel.bottomNavigationItems
     Scaffold(
         topBar = { FavoriteTopBar(myViewModel) },
-        bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
+        bottomBar = { MyBottomBar(navController, myViewModel, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -68,7 +68,7 @@ fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
 fun FavoriteTopBar(myViewModel: APIViewModel) {
     val showSearchBar: Boolean by myViewModel.showSearchBar.observeAsState(false)
     TopAppBar(
-        title = { Text(text = "Favorite", fontFamily = FontFamily(Font(R.font.pokemon))) },
+        title = { Text(text = "Favorites", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
@@ -76,9 +76,9 @@ fun FavoriteTopBar(myViewModel: APIViewModel) {
         ),
         actions = {
             if (showSearchBar) {
-                MySearchBar(APIViewModel())
+                MySearchBar(myViewModel)
             }
-            IconButton(onClick = { myViewModel.deploySearchBar() }) {
+            IconButton(onClick = { myViewModel.deploySearchBar(true) }) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
             }
         }

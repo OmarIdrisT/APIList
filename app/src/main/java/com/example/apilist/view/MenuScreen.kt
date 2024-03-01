@@ -70,11 +70,10 @@ import com.example.apilist.viewmodel.APIViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
-    val searchText: String by myViewModel.searchText.observeAsState("")
     val bottomNavigationItems = myViewModel.bottomNavigationItems
     Scaffold(
         topBar = { MenuTopAppBar(myViewModel) },
-        bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
+        bottomBar = { MyBottomBar(navController, myViewModel, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -85,7 +84,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier.zIndex(0f)
                 )
-                MyRecyclerView(myViewModel = myViewModel, navController = navController,searchText = searchText)
+                MyRecyclerView(myViewModel = myViewModel, navController = navController)
             }
         }
     )
@@ -94,7 +93,7 @@ fun MenuScreen(navController: NavController, myViewModel: APIViewModel) {
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController, searchText: String) {
+fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController) {
     val showLoading: Boolean by myViewModel.loading.observeAsState(true)
     val cards: CardList by myViewModel.cards.observeAsState(CardList(0, emptyList(), 0, 0, 0))
     myViewModel.getCards()
@@ -106,13 +105,12 @@ fun MyRecyclerView(myViewModel: APIViewModel, navController: NavController, sear
         ){
             CircularProgressIndicator(
                 modifier = Modifier.width(64.dp),
-                color = MaterialTheme.colorScheme.secondary,
+                color = Color.White,
             )
         }
     } else {
-        val filteredCards = cards.data.filter{ it.name.contains(searchText, ignoreCase = true) }
         LazyColumn() {
-            items(filteredCards) {
+            items(cards.data) {
                 CardItem(card = it, navController, myViewModel)
             }
 
@@ -146,6 +144,7 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
             colors = CardDefaults.cardColors(Color.DarkGray.copy(alpha = 0.6f)),
             onClick = {
                 myViewModel.setIDx(card.id)
+                myViewModel.onSearchTextChange("")
                 navController.navigate(Routes.DetailScreen.route)}
         ) {
             BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
@@ -184,7 +183,7 @@ fun CardItem(card: Data, navController: NavController, myViewModel: APIViewModel
 fun MenuTopAppBar(myViewModel: APIViewModel) {
     val showSearchBar: Boolean by myViewModel.showSearchBar.observeAsState(false)
     TopAppBar(
-        title = { Text(text = "Card List", fontFamily = FontFamily(Font(R.font.pokemon))) },
+        title = { Text(text = "Card list", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
@@ -192,9 +191,9 @@ fun MenuTopAppBar(myViewModel: APIViewModel) {
         ),
         actions = {
             if (showSearchBar) {
-                MySearchBar(APIViewModel())
+                MySearchBar(myViewModel)
             }
-            IconButton(onClick = { myViewModel.deploySearchBar() }) {
+            IconButton(onClick = { myViewModel.deploySearchBar(true) }) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
             }
         }
@@ -204,6 +203,7 @@ fun MenuTopAppBar(myViewModel: APIViewModel) {
 @Composable
 fun MyBottomBar(
     navigationController: NavController,
+    myViewModel:APIViewModel,
     bottomNavigationItems: List<BottomNavigationScreen>
 ) {
     BottomNavigation(backgroundColor = Color.Black, contentColor = Color.White) {
@@ -218,6 +218,8 @@ fun MyBottomBar(
                 alwaysShowLabel = false,
                 onClick = {
                     if (currentRoute != item.route) {
+                        myViewModel.deploySearchBar(false)
+                        myViewModel.onSearchTextChange("")
                         navigationController.navigate(item.route)
                     }
                 }
@@ -232,10 +234,10 @@ fun MySearchBar (myViewModel: APIViewModel) {
     val searchText: String by myViewModel.searchText.observeAsState("")
     val showSearchBar: Boolean by myViewModel.showSearchBar.observeAsState(true)
     SearchBar(
-        colors = SearchBarDefaults.colors(Color.Black, inputFieldColors = TextFieldDefaults.colors(Color.White)),
+        colors = SearchBarDefaults.colors(Color.Black, inputFieldColors = TextFieldDefaults.colors(focusedTextColor = Color.White, unfocusedTextColor = Color.White)),
         query = searchText,
-        onQueryChange = { myViewModel.onSearchTextChange(it) },
-        onSearch = { myViewModel.onSearchTextChange(it) },
+        onQueryChange = { myViewModel.getSearchedCards(it) },
+        onSearch = { myViewModel.getSearchedCards(it) },
         trailingIcon = {
                 Icon(
                 imageVector = Icons.Filled.Close,
@@ -243,13 +245,12 @@ fun MySearchBar (myViewModel: APIViewModel) {
                 tint = Color.White,
                 modifier = Modifier.clickable {
                     if (showSearchBar) {
-                        myViewModel.deploySearchBar()
+                        myViewModel.deploySearchBar(false)
                     }
-                    myViewModel.onSearchTextChange("")
                 })
         },
         active = true,
-        placeholder = { Text(text = "Search...", fontFamily = FontFamily(Font(R.font.pokemon)), color = Color.White) },
+        placeholder = { Text(text = "Search cards...", fontFamily = FontFamily(Font(R.font.pokemon)), color = Color.White) },
         onActiveChange = {},
         modifier = Modifier
             .fillMaxHeight(0.1f)

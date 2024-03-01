@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class APIViewModel: ViewModel() {
+class APIViewModel : ViewModel() {
 
     private val repository = Repository()
     private val _loading = MutableLiveData(true)
@@ -31,7 +31,7 @@ class APIViewModel: ViewModel() {
     val cardDetails = _cardDetails
     var id: String = ""
 
-    fun pickIcon(type: String) : Int {
+    fun pickIcon(type: String): Int {
         val typeIcon = when (type) {
             "Grass" -> R.drawable.grass
             "Fire" -> R.drawable.fire
@@ -59,39 +59,37 @@ class APIViewModel: ViewModel() {
     private var _searchText = MutableLiveData<String>()
     val searchText = _searchText
 
-    fun getCards(){
+    fun getCards() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = repository.getAllCards()
             withContext(Dispatchers.Main) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _cards.value = response.body()
                     _loading.value = false
-                }
-                else{
+                } else {
                     Log.e("Error :", response.message())
                 }
             }
         }
     }
-
 
 
     fun getCardById() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = repository.getCardsById(id)
             withContext(Dispatchers.Main) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _cardDetails.value = response.body()
                     _loading.value = false
-                }
-                else{
+                } else {
                     Log.e("Error :", response.message())
                 }
             }
         }
     }
-    fun setIDx(identificar:String){
-        this.id=identificar
+
+    fun setIDx(identificar: String) {
+        this.id = identificar
     }
 
     fun getFavorites() {
@@ -127,32 +125,37 @@ class APIViewModel: ViewModel() {
         }
     }
 
-    fun getSearchedCards(searchPokemon : String) {
+    fun getSearchedCards(searchPokemon: String) {
         _searchText.value = searchPokemon
-        val searchPokemonUpdated = "=name:$searchPokemon*"
+        val searchPokemonUpdated = "name:$searchPokemon*"
         CoroutineScope(Dispatchers.IO).launch {
             val response = repository.getFilteredCards(searchPokemonUpdated)
             withContext(Dispatchers.Main) {
-                if(response.isSuccessful){
-                    _cards.value = response.body()
+                if (response.isSuccessful) {
+                    _cards.value = CardList(
+                        response.body()!!.count,
+                        response.body()!!.data,
+                        response.body()!!.page,
+                        response.body()!!.pageSize,
+                        response.body()!!.totalCount
+                    )
                     _loading.value = false
-                }
-                else{
+                } else {
                     Log.e("Error :", response.message())
                 }
             }
         }
     }
 
-    fun deploySearchBar() {
-        _showSearchBar.value = !_showSearchBar.value!!
+    fun deploySearchBar(value : Boolean) {
+        _showSearchBar.value = value
     }
 
     fun onSearchTextChange(text: String) {
         _searchText.value = text
 
     }
-        
+
 }
 
 

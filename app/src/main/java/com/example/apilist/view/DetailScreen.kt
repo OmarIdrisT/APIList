@@ -61,8 +61,8 @@ fun DetailScreen(navController: NavController, myViewModel: APIViewModel) {
     myViewModel.getCardById()
     val card : PokemonDetails by myViewModel.cardDetails.observeAsState(PokemonDetails(Data(0, "", emptyList(), "", "", "", Images("",""), "", "", emptyList(), "", "", "", emptyList(), emptyList(), emptyList(), "", emptyList())))
     Scaffold(
-        topBar = { DetailTopAppBar(navController) },
-        bottomBar = { MyBottomBar(navController, bottomNavigationItems)},
+        topBar = { DetailTopAppBar(navController, myViewModel) },
+        bottomBar = { MyBottomBar(navController,myViewModel, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -166,9 +166,9 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailTopAppBar(navController: NavController) {
+fun DetailTopAppBar(navController: NavController, myViewModel: APIViewModel) {
     TopAppBar(
-        title = { Text(text = "Details", fontFamily = FontFamily(Font(R.font.pokemon))) },
+        title = { Text(text = "Card details", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Black,
             titleContentColor = Color.White,
@@ -176,17 +176,12 @@ fun DetailTopAppBar(navController: NavController) {
             actionIconContentColor = Color.White
         ),
         navigationIcon = {
-            IconButton(onClick = {navController.navigate(Routes.MenuScreen.route)}) {
+            IconButton(onClick = {
+                myViewModel.deploySearchBar(false)
+                navController.navigate(Routes.MenuScreen.route)
+            }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
             }
         },
-        actions = {
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
-            }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Menu")
-            }
-        }
     )
 }
