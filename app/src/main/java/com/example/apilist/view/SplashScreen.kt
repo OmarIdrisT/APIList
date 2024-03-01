@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -54,7 +55,7 @@ fun Splash(alphaAnim: Float) {
                 modifier = Modifier.size(200.dp),
                 alpha = alphaAnim
             )
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.fillMaxHeight(0.1f))
             Row(
                 horizontalArrangement = Arrangement.Center
             ) {

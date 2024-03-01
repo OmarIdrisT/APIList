@@ -172,7 +172,7 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = if(card.data.evolvesTo==null) "Evolves to:" else "Evolves to: ${card.data.evolvesTo}",
+                        text = if(card.data.evolvesTo==null) "Evolves to:" else "Evolves to: ${card.data.evolvesTo.joinToString(", ")}",
                         fontFamily = FontFamily(Font(R.font.times)),
                         style = MaterialTheme.typography.bodyLarge,
                         fontSize = 20.sp,
