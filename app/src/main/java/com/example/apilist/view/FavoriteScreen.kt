@@ -18,8 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -36,7 +34,7 @@ import com.example.apilist.viewmodel.APIViewModel
 fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
     val bottomNavigationItems = myViewModel.bottomNavigationItems
     Scaffold(
-        topBar = { FavoriteTopBar(myViewModel) },
+        topBar = { FavoriteTopBar() },
         bottomBar = { MyBottomBar(navController, myViewModel, bottomNavigationItems)},
         content = { paddingValues ->
             Box(modifier = Modifier
@@ -65,8 +63,7 @@ fun FavoriteScreen(navController: NavController, myViewModel: APIViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteTopBar(myViewModel: APIViewModel) {
-    val showSearchBar: Boolean by myViewModel.showSearchBar.observeAsState(false)
+fun FavoriteTopBar() {
     TopAppBar(
         title = { Text(text = "Favorites", fontFamily = FontFamily(Font(R.font.pokemon))) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -74,13 +71,5 @@ fun FavoriteTopBar(myViewModel: APIViewModel) {
             titleContentColor = Color.White,
             actionIconContentColor = Color.White
         ),
-        actions = {
-            if (showSearchBar) {
-                MySearchBar(myViewModel)
-            }
-            IconButton(onClick = { myViewModel.deploySearchBar(true) }) {
-                Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
-            }
-        }
     )
 }

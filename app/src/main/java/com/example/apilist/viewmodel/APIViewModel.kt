@@ -139,6 +139,7 @@ class APIViewModel : ViewModel() {
                         response.body()!!.pageSize,
                         response.body()!!.totalCount
                     )
+
                     _loading.value = false
                 } else {
                     Log.e("Error :", response.message())
