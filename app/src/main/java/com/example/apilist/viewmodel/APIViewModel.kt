@@ -139,8 +139,8 @@ class APIViewModel : ViewModel() {
                         response.body()!!.pageSize,
                         response.body()!!.totalCount
                     )
-
                     _loading.value = false
+
                 } else {
                     Log.e("Error :", response.message())
                 }
@@ -154,9 +154,7 @@ class APIViewModel : ViewModel() {
 
     fun onSearchTextChange(text: String) {
         _searchText.value = text
-
     }
-
 }
 
 

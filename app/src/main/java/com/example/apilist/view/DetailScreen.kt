@@ -202,7 +202,7 @@ fun DetailTopAppBar(navController: NavController, myViewModel: APIViewModel) {
         navigationIcon = {
             IconButton(onClick = {
                 myViewModel.deploySearchBar(false)
-                navController.navigate(Routes.MenuScreen.route)
+                navController.navigateUp()
             }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
             }
