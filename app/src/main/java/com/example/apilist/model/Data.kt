@@ -6,8 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "PokemonEntity")
 data class Data(
-    //val abilities: List<Ability>,
-    //val attacks: List<Attack>,
     val convertedRetreatCost: Int?,
     @ColumnInfo(name = "evolvesFrom", defaultValue = "none")
     val evolvesFrom: String?,
@@ -20,16 +18,13 @@ data class Data(
     val images: Images,
     val level: String?,
     val name: String,
-    val nationalPokedexNumbers: List<Int>?,
     val number: String?,
     var rarity: String?,
     @ColumnInfo(name = "regulationMark", defaultValue = "none")
     val regulationMark: String?,
-    //val resistances: List<Resistance>,
     val retreatCost: List<String>?,
     val rules: List<String>?,
     val subtypes: List<String>?,
     val supertype: String?,
     val types: List<String>?,
-    //val weaknesses: List<Weaknesse>
 )

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,8 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -46,20 +46,18 @@ import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.apilist.R
-import com.example.apilist.model.BottomNavigationScreen
 import com.example.apilist.model.Data
 import com.example.apilist.model.Images
 import com.example.apilist.model.PokemonDetails
 import com.example.apilist.navigation.Routes
 import com.example.apilist.viewmodel.APIViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavController, myViewModel: APIViewModel) {
     val bottomNavigationItems = myViewModel.bottomNavigationItems
     val loading = myViewModel.loading.observeAsState()
     myViewModel.getCardById()
-    val card : PokemonDetails by myViewModel.cardDetails.observeAsState(PokemonDetails(Data(0, "", emptyList(), "", "", "", Images("",""), "", "", emptyList(), "", "", "", emptyList(), emptyList(), emptyList(), "", emptyList())))
+    val card : PokemonDetails by myViewModel.cardDetails.observeAsState(PokemonDetails(Data(0, "", emptyList(), "", "", "", Images("",""), "", "", "", "", "", emptyList(), emptyList(), emptyList(), "", emptyList())))
     Scaffold(
         topBar = { DetailTopAppBar(navController, myViewModel) },
         bottomBar = { MyBottomBar(navController,myViewModel, bottomNavigationItems)},
@@ -88,53 +86,29 @@ fun DetailScreen(navController: NavController, myViewModel: APIViewModel) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
-    val favorito by myViewModel.isFavorite.observeAsState(false)
+    val favorite by myViewModel.isFavorite.observeAsState(false)
     myViewModel.isFavorite(card.data)
-    val favIcon = if(favorito) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+    val favIcon = if(favorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
     Card(
         border = BorderStroke(2.dp, Color.LightGray),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(8.dp),
         colors = CardDefaults.cardColors(Color.DarkGray.copy(alpha = 0.6f)),
     ) {
-        Column(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Row(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
                 GlideImage(
                     model = card.data.images.large,
                     contentDescription = "Card Image",
                     contentScale = ContentScale.FillHeight,
-                    modifier = Modifier.size(200.dp)
+                    modifier = Modifier.size(250.dp)
                 )
-                Column (horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(
-                        text = "LVL: ${card.data.level}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "HP: ${card.data.hp}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Types: ${card.data.types}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Subtypes:\n${card.data.subtypes}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                }
+
             }
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -144,13 +118,14 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                 Text(
                     text = card.data.name,
                     style = MaterialTheme.typography.bodyLarge,
+                    fontFamily = FontFamily(Font(R.font.times)),
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     fontSize = 30.sp
                 )
                 IconButton(onClick = {
                     myViewModel.isFavorite(card.data)
-                    if (!favorito) {
+                    if (!favorite) {
                         myViewModel.saveAsFavorite(card.data)
                     }else {
                         myViewModel.deleteFavorite(card.data)
@@ -159,6 +134,55 @@ fun CardDetails(card: PokemonDetails, myViewModel: APIViewModel) {
                     Icon(imageVector = favIcon, contentDescription = "Favorito", tint = Color.Red, modifier = Modifier.size(50.dp))
                 }
             }
+            Row(modifier = Modifier.fillMaxWidth(0.9f)) {
+                Text(
+                    text = if(card.data.flavorText==null) "" else "\n${card.data.flavorText}",
+                    fontFamily = FontFamily(Font(R.font.times)),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+            Spacer(Modifier.fillMaxHeight(0.1f))
+            Column(modifier = Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.Start) {
+                Text(
+                    text = if(card.data.rarity==null) "Rarity: None" else "Rarity: ${card.data.rarity}",
+                    fontFamily = FontFamily(Font(R.font.times)),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = if(card.data.supertype==null) "" else "Supertype: ${card.data.supertype}",
+                    fontFamily = FontFamily(Font(R.font.times)),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+                if (card.data.supertype == "Pokémon") {
+                    Text(
+                        text = if(card.data.evolvesFrom==null) "Evolves from:" else "Evolves from: ${card.data.evolvesFrom}",
+                        fontFamily = FontFamily(Font(R.font.times)),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = if(card.data.evolvesTo==null) "Evolves to:" else "Evolves to: ${card.data.evolvesTo}",
+                        fontFamily = FontFamily(Font(R.font.times)),
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+
         }
 
     }

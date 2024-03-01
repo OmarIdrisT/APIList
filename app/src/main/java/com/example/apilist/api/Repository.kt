@@ -2,7 +2,6 @@ package com.example.apilist.api
 
 import com.example.apilist.model.Data
 import com.example.apilist.model.PokemonApplication
-import com.example.apilist.model.PokemonDetails
 
 class Repository {
 
